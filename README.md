@@ -1,2 +1,2 @@
 # SDS264_DS2
-A projet for my SDS 264 in class work
+A projet for SDS 264 - Data Science 2
