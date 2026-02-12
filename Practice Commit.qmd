@@ -1,0 +1,14 @@
+---
+title: "Daily Commit"
+format: pdf
+---
+
+## My Daily Commit
+
+#### Thursday, February 12, 2026
+
+Dear Diary,
+
+Its a great morning, I almost didn't wake up this morning
+
+Sincerely, Yareli
