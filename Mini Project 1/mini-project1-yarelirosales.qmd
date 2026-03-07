@@ -1,0 +1,164 @@
+---
+title: "Mini Project 1 - SDS 264: Spring 2026"
+author: "Yareli Rosales"
+date: "March 6, 2026"
+subtitle: " What language patterns appear most frequently in Amazon product reviews, and what sentiment do these reviews express? A Text Analysis of Product Reviews"
+format:
+  pdf: default
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r,  include = FALSE, message = FALSE}
+
+library(tidyverse)
+library(tidytext)
+library(textdata)
+library(wordcloud)
+library(ggthemes)
+library(stringr)
+
+```
+
+```{r}
+reviews <- 
+  read_csv("amazon_product_reviews_sample.csv")
+
+reviews_tidy <- reviews |>
+  rename(
+    review_title = `Review Title`,
+    review_rating = `Review Rating`,
+    review_date = `Review Date`,
+    brand = Brand,
+    category = Category,
+    subcategory = `Sub Category`,
+    product_description = `Product Description`,
+    review_content = `Review Content`,
+    helpful_count = `Helpful Review Count`
+  )|>
+  select(review_title, review_rating, review_date, brand, category, subcategory, product_description, review_content, helpful_count)
+
+```
+Amazon product reviews play an important role in how customers evaluate products online. Because these reviews are written in natural language, text analysis can help identify patterns in how customers describe products and express satisfaction or dissatisfaction.
+
+In this analysis, I examine a dataset of Amazon product reviews containing information about ratings, brands, product descriptions, and review text. Using text analysis tools in R, I explore patterns in review language, sentiment, and structure.
+
+Specifically, this analysis explores the following questions:
+
+  1. What brands and product categories appear most often in the dataset?
+  2. How long are Amazon reviews?
+  3. What words appear most frequently in reviews?
+  4. What sentiment is expressed in review text?
+  5. What common phrases appear in customer feedback?
+
+One limitation of this dataset is its small size and limited helpfulness votes. As a result, the analysis focuses primarily on language patterns and sentiment rather than strong conclusions about review helpfulness.
+  
+What brands and categories appear the most in the dataset?
+
+```{r}
+reviews_tidy |>
+  count(brand, sort = TRUE)
+```
+We see that most reviews in this dataset come from a small number of brands, suggesting the sample may be concentrated in a few product categories. Most reviews in the dataset come from a small number of brands, particularly Schmidt's Deodorant and SheaMoisture.
+
+## String Functions 
+How long are review titles and review texts?
+
+```{r}
+reviews_tidy <- reviews_tidy |>
+  mutate(
+    title_length = str_length(review_title),
+    review_length = str_length(review_content)
+  )
+```
+Because reviews vary widely in length and writing style, the next step is to explore structural features of review text such as length and emotional expression.
+
+```{r}
+reviews_tidy |>
+  ggplot(aes(x = review_length)) +
+  geom_histogram(bins = 20, fill = "steelblue", color = "white") +
+  labs(
+    title = "Distribution of Amazon Review Lengths",
+    x = "Review Length (characters)",
+    y = "Number of Reviews"
+  ) +
+  theme_minimal()
+
+```
+The histogram above shows the distribution of review lengths in the dataset. Most reviews are relatively short, suggesting that many customers leave brief feedback rather than detailed explanations. However, a small number of longer reviews provide more extensive descriptions of product experiences.While review length provides information about structure, the actual language used in reviews can reveal deeper patterns about customer experiences. To examine the language used in reviews, the next step is to tokenize the review text into individual words.
+
+## Text Analysis
+
+```{r}
+reviews_words <- reviews_tidy |>
+  unnest_tokens(word, review_content)
+```
+To analyze the language used in reviews, I first tokenize the text into individual words using unnest_tokens(). This allows each word to be analyzed separately.
+
+```{r}
+reviews_words_clean <- reviews_words |>
+  anti_join(stop_words)
+```
+Common words such as “the,” “and,” and “is” do not convey meaningful information in text analysis. These words are removed using a standard stop word list.
+
+```{r}
+reviews_words_clean |>
+  count(word, sort = TRUE) |>
+  slice_max(n, n = 15) |>
+  ggplot(aes(reorder(word, n), n)) +
+  geom_col(fill = "darkgreen") +
+  coord_flip() +
+  labs(
+    title = "Most Common Words in Amazon Reviews",
+    x = "Word",
+    y = "Frequency"
+  )
+```
+The most common words in the reviews highlight recurring themes in customer feedback. Many of the frequently used words relate to product performance, effectiveness, and overall satisfaction. These patterns suggest that customers often focus on practical product outcomes when writing reviews.
+
+## Text Analysis Method #2: Sentiment Analysis
+```{r}
+bing_sentiment <- get_sentiments("bing")
+
+sentiment_words <- reviews_words_clean |>
+  inner_join(bing_sentiment)
+```
+```{r}
+sentiment_words |>
+  count(sentiment) |>
+  ggplot(aes(sentiment, n, fill = sentiment)) +
+  geom_col(show.legend = FALSE) +
+  labs(
+    title = "Sentiment Distribution in Amazon Reviews",
+    x = "Sentiment",
+    y = "Number of Words"
+  )
+```
+
+Sentiment analysis provides insight into the emotional tone of the reviews. The results suggest that positive words appear more frequently than negative words in this dataset, indicating that many customers express favorable experiences with the products they review.
+
+What phrases appear the most 
+```{r}
+review_bigrams <- reviews_tidy |>
+  unnest_tokens(bigram, review_content, token = "ngrams", n = 2)
+
+bigram_separated <- review_bigrams |>
+  separate(bigram, into = c("word1", "word2"), sep = " ")
+
+bigram_clean <- bigram_separated |>
+  filter(!word1 %in% stop_words$word,
+         !word2 %in% stop_words$word)
+
+bigram_clean |>
+  unite(bigram, word1, word2, sep = " ") |>
+  count(bigram, sort = TRUE) |>
+  slice_max(n, n = 10)
+
+```
+
+Examining common word pairs (bigrams) provides additional context beyond single-word analysis. These phrases reveal how customers naturally describe their experiences with products. Many of the most common bigrams involve product performance or descriptive language about effectiveness, suggesting that customers frequently focus on whether a product works as expected.
+
+## Conclusion
+This analysis explored patterns in Amazon product reviews using text analysis techniques in R. The results show that most reviews are relatively short and focus on practical product experiences. Word frequency analysis highlights common themes in customer feedback, while sentiment analysis suggests that positive language appears more frequently than negative language. Bigram analysis further reveals common phrases customers use when describing product performance.
+
+Although the dataset is relatively small, this project demonstrates how text analysis can uncover patterns in customer feedback and provide insight into how consumers communicate their experiences in online reviews.
