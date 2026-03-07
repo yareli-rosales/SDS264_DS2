@@ -8,18 +8,14 @@ format:
 editor_options: 
   chunk_output_type: console
 ---
-
 ```{r,  include = FALSE, message = FALSE}
-
 library(tidyverse)
 library(tidytext)
 library(textdata)
 library(wordcloud)
 library(ggthemes)
 library(stringr)
-
 ```
-
 ```{r}
 reviews <- 
   read_csv("amazon_product_reviews_sample.csv")
@@ -37,7 +33,6 @@ reviews_tidy <- reviews |>
     helpful_count = `Helpful Review Count`
   )|>
   select(review_title, review_rating, review_date, brand, category, subcategory, product_description, review_content, helpful_count)
-
 ```
 Amazon product reviews play an important role in how customers evaluate products online. Because these reviews are written in natural language, text analysis can help identify patterns in how customers describe products and express satisfaction or dissatisfaction.
 
@@ -68,12 +63,11 @@ How long are review titles and review texts?
 reviews_tidy <- reviews_tidy |>
   mutate(
     title_length = str_length(review_title),
-    review_length = str_length(review_content)
-  )
+    review_length = str_length(review_content))
 ```
 Because reviews vary widely in length and writing style, the next step is to explore structural features of review text such as length and emotional expression.
 
-```{r}
+```{r fig.alt = "This figure is a histogram showing the distribution of Amazon review lengths. The x-axis represents review length in characters, while the y-axis shows the number of reviews within each length range. Review lengths range from approximately 0 to about 1300 characters, and the number of reviews per bin ranges from 0 to about 16. The histogram shows that most reviews are relatively short, typically under 200–300 characters, while only a few reviews are much longer. Overall, the distribution is right-skewed, indicating that short reviews are far more common than very long ones."}
 reviews_tidy |>
   ggplot(aes(x = review_length)) +
   geom_histogram(bins = 20, fill = "steelblue", color = "white") +
@@ -83,12 +77,10 @@ reviews_tidy |>
     y = "Number of Reviews"
   ) +
   theme_minimal()
-
 ```
 The histogram above shows the distribution of review lengths in the dataset. Most reviews are relatively short, suggesting that many customers leave brief feedback rather than detailed explanations. However, a small number of longer reviews provide more extensive descriptions of product experiences.While review length provides information about structure, the actual language used in reviews can reveal deeper patterns about customer experiences. To examine the language used in reviews, the next step is to tokenize the review text into individual words.
 
 ## Text Analysis
-
 ```{r}
 reviews_words <- reviews_tidy |>
   unnest_tokens(word, review_content)
@@ -112,7 +104,7 @@ reviews_words_clean |>
     title = "Most Common Words in Amazon Reviews",
     x = "Word",
     y = "Frequency"
-  )
+    )
 ```
 The most common words in the reviews highlight recurring themes in customer feedback. Many of the frequently used words relate to product performance, effectiveness, and overall satisfaction. These patterns suggest that customers often focus on practical product outcomes when writing reviews.
 
@@ -153,12 +145,9 @@ bigram_clean |>
   unite(bigram, word1, word2, sep = " ") |>
   count(bigram, sort = TRUE) |>
   slice_max(n, n = 10)
-
 ```
 
 Examining common word pairs (bigrams) provides additional context beyond single-word analysis. These phrases reveal how customers naturally describe their experiences with products. Many of the most common bigrams involve product performance or descriptive language about effectiveness, suggesting that customers frequently focus on whether a product works as expected.
 
 ## Conclusion
-This analysis explored patterns in Amazon product reviews using text analysis techniques in R. The results show that most reviews are relatively short and focus on practical product experiences. Word frequency analysis highlights common themes in customer feedback, while sentiment analysis suggests that positive language appears more frequently than negative language. Bigram analysis further reveals common phrases customers use when describing product performance.
-
-Although the dataset is relatively small, this project demonstrates how text analysis can uncover patterns in customer feedback and provide insight into how consumers communicate their experiences in online reviews.
+This analysis explored patterns in Amazon product reviews using text analysis techniques in R. The results show that most reviews are relatively short and focus on practical product experiences. Word frequency analysis highlights common themes in customer feedback, while sentiment analysis suggests that positive language appears more frequently than negative language. Bigram analysis further reveals common phrases customers use when describing product performance. Although the dataset is relatively small, this project demonstrates how text analysis can uncover patterns in customer feedback and provide insight into how consumers communicate their experiences in online reviews.
