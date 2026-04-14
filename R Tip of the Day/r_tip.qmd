@@ -5,7 +5,6 @@ editor_options:
   chunk_output_type: console
 ---
 
-
 ```{r}
 #|include: false
 library(tidyverse)
@@ -95,4 +94,100 @@ gwalkr(iris)
 #|echo: false
 gwalkr(iris)
 ```
+:::
+
+::: {.fragment .fade-in}
+3. Start exploring interactively 
+:::
+
+## What can you explore inside of GWalkR
+
+::: {.fragment .fade-in}
+Drag variables to axes
+:::
+
+::: {.fragment .fade-in}
+Create scatterplots, histograms, and stacked views
+:::
+
+::: {.fragment .fade-in}
+Filter and segment data interactively
+:::
+
+::: {.fragment .fade-in}
+Discover patterns without coding
+:::
+
+
+## Let’s try it!
+
+::: {.fragment .fade-in}
+Now let’s open GWalkR and explore the dataset interactively.
+:::
+
+::: {.fragment .fade-in}
+We will use the built-in `mtcars` dataset, which contains information about car performance such as:
+
+- Miles per gallon (mpg)
+- Horsepower (hp)
+- Weight (wt)
+:::
+
+## Let’s try it! {auto-animate=true .smaller}
+
+```{.r code-line-numbers="3"}
+gwalkr(mtcars)
+```
+
+::: {.fragment .fade-left}
+```{r}
+#|echo: false
+gwalkr(mtcars)
+```
+:::
+
+## Mtcars
+
+::: {.fragment .fade-left}
+```{r}
+#|echo: false
+gwalkr(mtcars)
+```
+:::
+
+
+
+
+## Bonus Features 
+
+::: {.fragment .fade-in}
+Works well with Shiny apps (web application framework)
+:::
+
+::: {.fragment .fade-in}
+Can be used for fast EDA in reports and notebooks
+:::
+
+::: {.fragment .fade-in}
+Great for teaching and presentations
+:::
+
+
+## Key Takeaway 
+
+GWalkR makes R feel like Tableau — but still fully inside your R workflow
+
+![](https://wp.sfdcdigital.com/tableau/en-us/wp-content/uploads/sites/47/2026/03/data_visualization_definition.gif){fig-align="center" width="23%"}
+
+
+
+## Thank you!
+
+### GWalkR Package Guide
+
+[Here](https://github.com/Kanaries/GWalkR) is the guide to the package on GitHub.
+
+![](https://github.com/Kanaries/GWalkR/blob/main/docs/img/hex_logo.png?raw=true){fig-align="center" width="23%"}
+
+
 
