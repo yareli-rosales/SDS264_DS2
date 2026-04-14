@@ -1,0 +1,98 @@
+---
+format: revealjs
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r}
+#|include: false
+library(tidyverse)
+library(gifski)
+library(av)
+```
+
+
+## {.center}
+<h3 class>[R Tip of the Day]{.orange}</h3>
+<h2 class="r-fit-text">Interactive Data Exploration</h2>
+<h2 class="r-fit-text">with [GWalkR]{.flow}</h2>
+
+![](https://github.com/Kanaries/GWalkR/blob/main/docs/img/hex_logo.png?raw=true)
+
+::: footer
+<span style="color:#94a3b8;">Yareli Rosales • SDS 264 • Spring 2026</span>
+:::
+
+
+## What is GWalkR? {auto-animate=true}
+
+. . .
+
+> `GWalkR` is an interactive R package for Exploratory Data Analysis (EDA) that allows users to visualize and explore data using a drag-and-drop interface.
+
+. . .
+
+* It turns your data frame into a Tableau-style dashboard directly inside R.
+
+. . .
+
+* Using `GWalkR` makes it faster to understand patterns, relationships, and distributions in your data.
+
+. . .
+
+* It is especially useful at the beginning of a data analysis workflow.
+
+
+
+## Why use it?
+
+::: {.fragment .fade-in}
+- Explore data without writing complex code
+:::
+
+::: {.fragment .fade-in}
+- Build visualizations using drag-and-drop
+:::
+
+::: {.fragment .fade-in}
+- Quickly understand patterns, distributions, and relationships
+:::
+
+
+## How to use GWalkR {auto-animate=true .smaller}
+
+::: {.fragment .fade-in}
+1. Install and load the package
+
+```{.r code-line-numbers="1"}
+install.packages("GWalkR")
+library(GWalkR)
+```
+:::
+
+
+
+::: {.fragment .fade-left}
+```{r}
+#|echo: false
+library(GWalkR)
+library(tidyverse)
+```
+:::
+
+
+::: {.fragment .fade-in}
+2. Pass your dataset into `gwalkr()`
+```{.r code-line-numbers="2"}
+gwalkr(iris)
+```
+:::
+
+::: {.fragment .fade-left}
+```{r}
+#|echo: false
+gwalkr(iris)
+```
+
